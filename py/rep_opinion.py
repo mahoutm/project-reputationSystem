@@ -1,5 +1,6 @@
 import psycopg2
 
+# http://pythonhosted.org/psycopg2/
 # connect to db
 try:
     #conn = psycopg2.connect("dbname='uzeni' user='postgres' host='192.168.50.188' password='dbwpsdkdl'")
