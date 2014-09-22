@@ -6,6 +6,7 @@
 
 # Local source to HDFS sequence file
 java DocToSeq data/tweets-train.tsv train/seq
+java PostgresToSeq X train/seq
 
 # sequence<text,text> to vector<text,value> file
 mahout seq2sparse -i train/seq -o train/vec
@@ -15,10 +16,11 @@ mahout trainnb -i train/vec/tfidf-vectors -el -li train/labelindex -o train/mode
 
 # 2. TESTING 
 # Local source to HDFS sequence file using model information.
-java DocToSeqWithModel train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 data/tweets-test-set.tsv test/seq
+java DocToVecWithModel train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 data/tweets-test-set.tsv test/vec
+java PostgresToVecWithModel train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 X test/vec
 
 # testing and verifying 
-mahout testnb -i test/seq -m train/model -l train/labelindex -ow -o test/out -c
+mahout testnb -i test/vec -m train/model -l train/labelindex -ow -o test/out -c
 
 # frequency count of word per catagory
 java TopCategoryWords train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000

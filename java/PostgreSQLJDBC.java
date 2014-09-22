@@ -12,7 +12,7 @@ public class PostgreSQLJDBC {
        try {
        Class.forName("org.postgresql.Driver");
          c = DriverManager
-            .getConnection("jdbc:postgresql://192.168.50.188:5432/uzeni",
+            .getConnection("jdbc:postgresql://192.168.50.170:5432/uzeni",
             "postgres", "dbwpsdkdl");
          c.setAutoCommit(false);
          System.out.println("Opened database successfully");
