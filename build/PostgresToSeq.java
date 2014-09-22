@@ -14,6 +14,12 @@
  * limitations under the License.
  */
 
+// for PostgreSQL's JDBC
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 
@@ -24,10 +30,7 @@ import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Writer;
 import org.apache.hadoop.io.Text;
 
-/**
- * http://www.chimpler.com
- */
-public class DocToSeq {
+public class PostgresToSeq {
 	public static void main(String args[]) throws Exception {
 		if (args.length != 2) {
 			System.err.println("Arguments: [input tsv file] [output sequence file]");
@@ -39,31 +42,40 @@ public class DocToSeq {
 		FileSystem fs = FileSystem.get(configuration);
 		Writer writer = new SequenceFile.Writer(fs, configuration, new Path(outputDirName + "/chunk-0"),
 				Text.class, Text.class);
-		
+              	Connection c = null;
+		Statement stmt = null;
+		try {
+		Class.forName("org.postgresql.Driver");
+		c = DriverManager
+			.getConnection("jdbc:postgresql://192.168.50.188:5432/uzeni","postgres", "dbwpsdkdl");
+		c.setAutoCommit(false);
+		System.out.println("Opened database successfully");
+		stmt = c.createStatement();
+		ResultSet rs = stmt.executeQuery( "SELECT * FROM WATER_KOREA_DUMP LIMIT 100;" );
 		int count = 0;
-		BufferedReader reader = new BufferedReader(new FileReader(inputFileName));
 		Text key = new Text();
 		Text value = new Text();
-		while(true) {
-			String line = reader.readLine();
-			if (line == null) {
-				break;
-			}
-			String[] tokens = line.split("\t", 3);
-			if (tokens.length != 3) {
-				System.out.println("Skip line: " + line);
-				continue;
-			}
-			String category = tokens[0];
-			String id = tokens[1];
-			String message = tokens[2];
+		
+		while ( rs.next() ) {
+			String seq = rs.getString("seq");
+			String rep = rs.getString("rep");
+			String body = rs.getString("body");
+			String category = rep;
+			String id = seq; 
+			String message = body;
 			key.set("/" + category + "/" + id);
 			value.set(message);
 			writer.append(key, value);
 			count++;
 		}
-		reader.close();
+		rs.close();
+         	stmt.close();
+         	c.close();
 		writer.close();
 		System.out.println("Wrote " + count + " entries.");
+		} catch ( Exception e ) {
+         		System.err.println( e.getClass().getName()+": "+ e.getMessage() );
+         		System.exit(0);
+       		}
 	}
 }

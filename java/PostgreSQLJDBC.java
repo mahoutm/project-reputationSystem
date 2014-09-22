@@ -18,10 +18,10 @@ public class PostgreSQLJDBC {
          System.out.println("Opened database successfully");
 
          stmt = c.createStatement();
-         ResultSet rs = stmt.executeQuery( "SELECT * FROM PG_TABLES LIMIT 10;" );
+         ResultSet rs = stmt.executeQuery( "SELECT * FROM WATER_KOREA_DUMP LIMIT 10;" );
          while ( rs.next() ) {
-            String  tablename = rs.getString("tablename");
-            System.out.println( "TABLE NAME = " + tablename );
+            String body = rs.getString("body");
+            System.out.println( "BODY = " + body );
             System.out.println();
          }
          rs.close();
