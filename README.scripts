@@ -29,4 +29,5 @@ java TopCategoryWords train/model train/labelindex train/vec/dictionary.file-0 t
 # 3. CLASSIFYING
 # classifying
 java Classifier train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 data/tweets-test-set.tsv 
+java PostgresClassifier train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 data/tweets-test-set.tsv 
 
