@@ -27,7 +27,7 @@ for rec in cur:
 
 # update reputation field.
 for seq in stack.keys():
-	stmt = "update water_korea_dump set rep = '" + stack[seq] + "' where seq = " + seq
+	stmt = "update water_korea_train set rep = '" + stack[seq] + "' where seq = " + seq
 	print ('document ' + seq + ' have updated to ' + stack[seq] + '.')
 	cur.execute(stmt)
 
