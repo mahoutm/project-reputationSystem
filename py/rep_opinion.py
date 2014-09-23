@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import psycopg2
 
 var = raw_input("WHO ARE YOU ? (JERRY:0 ,RED:1 ,DAVE:2 ,MARK:3) ")
@@ -23,7 +25,10 @@ for rec in cur:
 	if str(seq % 4) == X :
 		print (body)
 		var = raw_input("Please your decision (1:good or 2:bad or others:None) : ")
-		stack[str(seq)] = 'Good' if var == '1' else 'Bad'
+		stack[str(seq)] = 'None'
+		if var == '1' : stack[str(seq)] = 'Good'
+		if var == '2' : stack[str(seq)] = 'Bad'
+		print ('You typed :' + stack[str(seq)] )
 
 # update reputation field.
 for seq in stack.keys():
