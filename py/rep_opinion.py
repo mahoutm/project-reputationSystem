@@ -22,7 +22,7 @@ for rec in cur:
 	seq, gettm, doctm, target, num, link, body, rep = rec
 	if str(seq % 4) == X :
 		print (body)
-		var = raw_input("Please your decision (1:good or 2:bad) : ")
+		var = raw_input("Please your decision (1:good or 2:bad or others:None) : ")
 		stack[str(seq)] = 'Good' if var == '1' else 'Bad'
 
 # update reputation field.
