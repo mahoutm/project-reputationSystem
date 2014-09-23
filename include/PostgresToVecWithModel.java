@@ -53,12 +53,12 @@ public class PostgresToVecWithModel {
 	
 	public static void main(String[] args) throws Exception {
 		if (args.length < 4) {
-			System.out.println("Arguments: [dictionnary] [document frequency] [tweet file] [output file]");
+			System.out.println("Arguments: [dictionnary] [document frequency] [input postgres table] [output file]");
 			return;
 		}
 		String dictionaryPath = args[0];
 		String documentFrequencyPath = args[1];
-		String tweetsPath = args[2];
+		String tablename = args[2];
 		String outputFileName = args[3];
 
 		Configuration configuration = new Configuration();
@@ -80,7 +80,7 @@ public class PostgresToVecWithModel {
                 c.setAutoCommit(false);
                 System.out.println("Opened database successfully");
                 stmt = c.createStatement();
-                ResultSet rs = stmt.executeQuery( "SELECT * FROM WATER_KOREA_DUMP LIMIT 100;" );
+                ResultSet rs = stmt.executeQuery( "SELECT * FROM " + tablename );
                 //int count = 0;
 
 		Text key = new Text();
@@ -95,13 +95,6 @@ public class PostgresToVecWithModel {
                         String category = rep;
                         String id = seq;
                         String message = body;
-                        //value.set(message);
-                        //writer.append(key, value);
-                        //count++;
-			
-			//String label = tokens[0];
-			//String tweetId = tokens[1];
-			//String tweet = tokens[2];
 			
 			key.set("/" + category + "/" + seq);
 

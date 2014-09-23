@@ -33,7 +33,7 @@ import org.apache.hadoop.io.Text;
 public class PostgresToSeq {
 	public static void main(String args[]) throws Exception {
 		if (args.length != 2) {
-			System.err.println("Arguments: [input tsv file] [output sequence file]");
+			System.err.println("Arguments: [input postgres table] [output sequence file]");
 			return;
 		}
 		String inputFileName = args[0];
@@ -51,7 +51,7 @@ public class PostgresToSeq {
 		c.setAutoCommit(false);
 		System.out.println("Opened database successfully");
 		stmt = c.createStatement();
-		ResultSet rs = stmt.executeQuery( "SELECT * FROM WATER_KOREA_DUMP LIMIT 100;" );
+		ResultSet rs = stmt.executeQuery( "SELECT * FROM " + inputFileName );
 		int count = 0;
 		Text key = new Text();
 		Text value = new Text();

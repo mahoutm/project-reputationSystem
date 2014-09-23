@@ -4,9 +4,12 @@
 #  b. delimiter : '\t'
 #
 
+train = 'WATER_KOREA_TRAIN'
+test = 'WATER_KOREA_TEST'
+
 # Local source to HDFS sequence file
 java DocToSeq data/tweets-train.tsv train/seq
-java PostgresToSeq X train/seq
+java PostgresToSeq $train train/seq
 
 # sequence<text,text> to vector<text,value> file
 mahout seq2sparse -i train/seq -o train/vec
@@ -17,7 +20,7 @@ mahout trainnb -i train/vec/tfidf-vectors -el -li train/labelindex -o train/mode
 # 2. TESTING 
 # Local source to HDFS sequence file using model information.
 java DocToVecWithModel train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 data/tweets-test-set.tsv test/vec
-java PostgresToVecWithModel train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 X test/vec
+java PostgresToVecWithModel train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 $train test/vec
 
 # testing and verifying 
 mahout testnb -i test/vec -m train/model -l train/labelindex -ow -o test/out -c
@@ -29,5 +32,5 @@ java TopCategoryWords train/model train/labelindex train/vec/dictionary.file-0 t
 # 3. CLASSIFYING
 # classifying
 java Classifier train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 data/tweets-test-set.tsv 
-java PostgresClassifier train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 data/tweets-test-set.tsv 
+java PostgresClassifier train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 $test
 

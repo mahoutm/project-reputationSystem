@@ -69,14 +69,14 @@ public class PostgresClassifier {
 
 	public static void main(String[] args) throws Exception {
 		if (args.length < 5) {
-			System.out.println("Arguments: [model] [label index] [dictionnary] [document frequency] [tweet file]");
+			System.out.println("Arguments: [model] [label index] [dictionnary] [document frequency] [input postgres table]");
 			return;
 		}
 		String modelPath = args[0];
 		String labelIndexPath = args[1];
 		String dictionaryPath = args[2];
 		String documentFrequencyPath = args[3];
-		String tweetsPath = args[4];
+		String tablename = args[4];
 		
 		Configuration configuration = new Configuration();
 
@@ -109,7 +109,7 @@ public class PostgresClassifier {
                 c.setAutoCommit(false);
                 System.out.println("Opened database successfully");
                 stmt = c.createStatement();
-                ResultSet rs = stmt.executeQuery( "SELECT * FROM WATER_KOREA_DUMP LIMIT 100;" );
+                ResultSet rs = stmt.executeQuery( "SELECT * FROM " + tablename );
 
                 while ( rs.next() ) {
                         String seq = rs.getString("seq");
