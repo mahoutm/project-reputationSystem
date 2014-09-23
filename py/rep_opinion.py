@@ -1,5 +1,8 @@
 import psycopg2
 
+var = raw_input("WHO ARE YOU ? (JERRY:0 ,RED:1 ,DAVE:2 ,MARK:3) ")
+X = var  
+
 # http://pythonhosted.org/psycopg2/
 # connect to db
 try:
@@ -17,14 +20,15 @@ cur.execute("select * from water_korea_dump where rep is null")
 # input your opinion to docuemnts. 
 for rec in cur:
 	seq, target, num, link, body, rep = rec
-	print (body)
-	var = raw_input("Please your decision (1:good or 2:bad) : ")
-	stack[str(seq)] = 'Good' if int(var) == 1 else 'Bad'
+	if str(seq % 4) == X :
+		print (body)
+		var = raw_input("Please your decision (1:good or 2:bad) : ")
+		stack[str(seq)] = 'Good' if var == '1' else 'Bad'
 
 # update reputation field.
 for seq in stack.keys():
 	stmt = "update water_korea_dump set rep = '" + stack[seq] + "' where seq = " + seq
-	print stmt
+	print ('document ' + seq + ' have updated to ' + stack[seq] + '.')
 	cur.execute(stmt)
 
 conn.commit()
