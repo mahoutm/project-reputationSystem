@@ -7,9 +7,11 @@ CREATE SEQUENCE water_seq
   CACHE 1;
 
 -- raw data set
-CREATE TABLE water_korea_dump
+CREATE TABLE water_korea_train
 (
   seq bigint DEFAULT nextval('water_seq'::regclass),
+  gettm timestamp,
+  doctm timestamp, 
   target character varying(100),
   num bigint,
   link character varying(300),

@@ -15,11 +15,11 @@ stack = {}
 
 # open cursor
 cur = conn.cursor()
-cur.execute("select * from water_korea_dump where rep is null") 
+cur.execute("select * from water_korea_train where rep is null") 
 
 # input your opinion to docuemnts. 
 for rec in cur:
-	seq, target, num, link, body, rep = rec
+	seq, gettm, doctm, target, num, link, body, rep = rec
 	if str(seq % 4) == X :
 		print (body)
 		var = raw_input("Please your decision (1:good or 2:bad) : ")
