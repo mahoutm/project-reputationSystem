@@ -13,9 +13,9 @@ java PostgresToSeq $train train/seq
 
 # sequence<text,text> to vector<text,value> file
 mahout seq2sparse -i train/seq -o train/vec
+
 # training and creating model
 mahout trainnb -i train/vec/tfidf-vectors -el -li train/labelindex -o train/model -ow -c
-
 
 # 2. TESTING 
 # Local source to HDFS sequence file using model information.
@@ -34,3 +34,9 @@ java TopCategoryWords train/model train/labelindex train/vec/dictionary.file-0 t
 java Classifier train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 data/tweets-test-set.tsv 
 java PostgresClassifier train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 $test
 
+
+##### ETC ######
+# split to train and test
+mahout split  -i train/vec/tfidf-vectors --trainingOutput train/vec_train --testOutput train/vec_test --randomSelectionPct 40 --overwrite --sequenceFiles -xm sequential
+mahout testnb -i train/vec_train -m train/model -l train/labelindex -ow -o test/out -c
+mahout testnb -i train/vec_test  -m train/model -l train/labelindex -ow -o test/out -c
