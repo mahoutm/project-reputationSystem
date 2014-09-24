@@ -102,6 +102,7 @@ public class PostgresClassifier {
 
                 Connection c = null;
                 Statement stmt = null;
+                Statement stmtU = null;
                 try {
                 Class.forName("org.postgresql.Driver");
                 c = DriverManager
@@ -109,6 +110,7 @@ public class PostgresClassifier {
                 c.setAutoCommit(false);
                 System.out.println("Opened database successfully");
                 stmt = c.createStatement();
+                stmtU = c.createStatement();
                 ResultSet rs = stmt.executeQuery( "SELECT * FROM " + tablename );
 
                 while ( rs.next() ) {
@@ -170,9 +172,13 @@ public class PostgresClassifier {
 				System.out.print("  " + labels.get(categoryId) + ": " + score);
 			}
 			System.out.println(" => " + labels.get(bestCategoryId));
+			System.out.println("UPDATE " + tablename + " SET rep = '" + labels.get(bestCategoryId) + "' WHERE seq = " + id );
+			stmtU.executeUpdate("UPDATE " + tablename + " SET rep = '" + labels.get(bestCategoryId) + "' WHERE seq = " + id ); 
 		}
                 rs.close();
                 stmt.close();
+                stmtU.close();
+		c.commit();
                 c.close();
 		analyzer.close();
                 } catch ( Exception e ) {
