@@ -111,7 +111,7 @@ public class PostgresClassifier {
                 System.out.println("Opened database successfully");
                 stmt = c.createStatement();
                 stmtU = c.createStatement();
-                ResultSet rs = stmt.executeQuery( "SELECT * FROM " + tablename );
+                ResultSet rs = stmt.executeQuery( "SELECT * FROM " + tablename + " WHERE rep is null");
 
                 while ( rs.next() ) {
                         String seq = rs.getString("seq");
