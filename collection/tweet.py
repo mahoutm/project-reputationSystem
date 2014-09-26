@@ -1,20 +1,35 @@
-#!/usr/local/bin/python
+#!/usr/bin/python2.7
 # -*- coding: utf-8 -*-
+
+# referred by http://tweepy.readthedocs.org/en/v2.3.0/
 
 import tweepy
 
-consumer_key = 'WX5khpDKiMqUfBSey6jE1HIIB'
-consumer_secret = '3siy2tRZRJzH2mgdZ5gj0ntEAo7dejkjCdKik62VAAeC5QYT7S'
+consumer_key = '< INPUT >'
+consumer_secret = '< INPUT >'
 
-access_token = '2599333584-EHejq2qadhVt8p40THkLjvqHy69xzbqaxgeE0rr'
-access_token_secret = 'UyR3gqG1NFPZLzaXl0Qtt8PExTRGUdulKa3Tw3vrCoAmo'
+access_token = '< INPUT >'
+access_token_secret = '< INPUT >'
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
 api = tweepy.API(auth)
 
-# public_tweets = api.home_timeline()
-search_tweets = api.search(q='안철수')
-for tweet in search_tweets:
-    print tweet.text
+# old method : Limit 100
+# search_tweets = api.search(q='안철수',count=100)
+# for tweet in search_tweets:
+#     print tweet.text
+
+# cursor method
+cnt = 0
+for tweet in tweepy.Cursor(api.search,
+                           q="안철수",
+                           count=10,
+                           result_type="recent",
+                           include_entities=True,
+                           lang="ko").items(25):
+	cnt += 1
+	print (tweet.text)
+
+print cnt
