@@ -1,0 +1,10 @@
+# initalizate oozie db.
+su oozie
+rm -rf /hadoop/oozie/data/oozie-db
+/usr/lib/oozie/bin/ooziedb.sh create -run
+
+# to run
+oozie job -oozie http://sandbox:11000/oozie -config job.properties -run
+oozie job -oozie http://sandbox:11000/oozie -info <up outputted job id> 
+
+

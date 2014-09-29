@@ -1,0 +1,30 @@
+drop table if exists water_korea_test_sum;
+
+create table water_korea_test_sum (
+gettm varchar(12), good_cnt bigint default 0, bad_cnt bigint default 0, none_cnt bigint default 0, all_cnt bigint default 0)
+
+insert into water_korea_test_sum (gettm,all_cnt)
+select gettm,count(*) from water_korea_test group by gettm;
+
+
+select 'update water_korea_test_sum set good_cnt ='|| count ||'
+ where gettm = \''|| gettm || '\';' from (
+select gettm, count(*) from water_korea_test
+where rep = 'Good' group by gettm ) a
+;
+
+select 'update water_korea_test_sum set bad_cnt ='|| count ||'
+ where gettm = \''|| gettm || '\';' from (
+select gettm, count(*) from water_korea_test
+where rep = 'Bad' group by gettm ) a
+;
+
+select 'update water_korea_test_sum set none_cnt ='|| count ||'
+ where gettm = \''|| gettm || '\';' from (
+select gettm, count(*) from water_korea_test
+where rep = 'None' group by gettm ) a
+;
+
+
+select * from water_korea_test_sum order by gettm desc;
+
