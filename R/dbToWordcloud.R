@@ -1,3 +1,5 @@
+# par(family="AppleGothic") for using hangul on mac
+
 library("RPostgreSQL")
 library("tm")
 library("wordcloud")
