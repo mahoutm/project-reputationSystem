@@ -1,0 +1,16 @@
+
+<coordinator-app name="reputation"
+  frequency="${coord:hours(1)}"
+  start="2014-09-29T02:15Z" end="2014-10-06T02:15Z" timezone="America/Los_Angeles"
+  xmlns="uri:oozie:coordinator:0.2">
+  <controls>
+    <concurrency>1</concurrency>
+    <execution>FIFO</execution>
+    <throttle>1</throttle>
+  </controls>
+  <action>
+    <workflow>
+      <app-path>${wf_application_path}</app-path>
+   </workflow>
+  </action>
+</coordinator-app>

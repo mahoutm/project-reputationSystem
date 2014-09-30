@@ -1,38 +1,19 @@
-<!--******************************************-->
-<!--workflow.xml                              -->
-<!--******************************************-->
- 
-<workflow-app name="WorkFlowForShellActionWithCaptureOutput" xmlns="uri:oozie:workflow:0.1">
-    <start to="shellAction"/>
-    <action name="shellAction">
+
+<workflow-app name="reputation" xmlns="uri:oozie:workflow:0.4">
+    <start to="shell"/>
+    <action name="shell">
         <shell xmlns="uri:oozie:shell-action:0.1">
             <job-tracker>${jobTracker}</job-tracker>
             <name-node>${nameNode}</name-node>
-            <configuration>
-                <property>
-                  <name>mapred.job.queue.name</name>
-                  <value>${queueName}</value>
-                </property>
-            </configuration>
-            <exec>${ShellScript}</exec>
-            <argument>${inputDir}</argument>
-            <file>${ShellScriptPath}#${ShellScript}</file>
-            <capture-output/>
+            <exec>run.sh</exec>
+            <file>run.sh#run.sh</file>
+              <capture-output/>
         </shell>
-	<ok to="sendEmail"/>
-        <error to="killAction"/>
-    </action>
-    <action name="sendEmail">
-        <email xmlns="uri:oozie:email-action:0.1">
-              <to>${emailToAddress}</to>
-              <subject>Output of workflow ${wf:id()}</subject>
-              <body>Results from line count: ${wf:actionData('shellAction')['NumberOfLines']}</body>
-        </email>
         <ok to="end"/>
-        <error to="end"/>
+        <error to="kill"/>
     </action>
-    <kill name="killAction">
-        <message>"Killed job due to error"</message>
+    <kill name="kill">
+        <message>Action failed, error message[${wf:errorMessage(wf:lastErrorNode())}]</message>
     </kill>
     <end name="end"/>
 </workflow-app>
