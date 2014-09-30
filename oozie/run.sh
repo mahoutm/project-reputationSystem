@@ -5,6 +5,8 @@ TABLE='water_korea_test'
 SUM_TABLE='water_korea_test_sum'
 PGSQL='psql -AtEq -h 192.168.50.170 -U postgres -d uzeni '
 
+
+# Naive Bayes Classifier using mahout.
 export CLASSPATH=$(hadoop classpath):$MAHOUT_HOME/mahout-examples-0.9.0.2.1.1.0-385-job.jar:$APP_HOME/lib/mahoutNB-tools.jar:$APP_HOME/lib/postgresql-9.3-1102.jdbc41.jar:$APP_HOME/lib:.
 export JAVA_HOME=/usr
 
@@ -20,7 +22,8 @@ SELECT A.gettm FROM
 	ON A.gettm = B.gettm
 	WHERE B.gettm IS NULL;
 EOF
-	
+
+# Make Summary Table.	
 # Rep count up
 $PGSQL <<EOF | $PGSQL
 SELECT
