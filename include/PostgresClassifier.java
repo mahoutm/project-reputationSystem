@@ -20,8 +20,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+//import java.io.BufferedReader;
+//import java.io.FileReader;
 import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -115,13 +115,13 @@ public class PostgresClassifier {
 
                 while ( rs.next() ) {
                         String seq = rs.getString("seq");
-                        String rep = rs.getString("rep");
+                        //String rep = rs.getString("rep");
                         String body = rs.getString("body");
-                        String category = rep;
+                        //String category = rep;
                         String id = seq;
                         String message = body;
 
-			System.out.println("Doc: " + id + "\t" + message);
+			//System.out.println("Doc: " + id + "\t" + message);
 
 			Multiset<String> words = ConcurrentHashMultiset.create();
 			
@@ -169,10 +169,10 @@ public class PostgresClassifier {
 					bestScore = score;
 					bestCategoryId = categoryId;
 				}
-				System.out.print("  " + labels.get(categoryId) + ": " + score);
+				//System.out.print("  " + labels.get(categoryId) + ": " + score);
 			}
-			System.out.println(" => " + labels.get(bestCategoryId));
-			System.out.println("UPDATE " + tablename + " SET rep = '" + labels.get(bestCategoryId) + "' WHERE seq = " + id );
+			//System.out.println(" => " + labels.get(bestCategoryId));
+			//System.out.println("UPDATE " + tablename + " SET rep = '" + labels.get(bestCategoryId) + "' WHERE seq = " + id );
 			stmtU.executeUpdate("UPDATE " + tablename + " SET rep = '" + labels.get(bestCategoryId) + "' WHERE seq = " + id ); 
 		}
                 rs.close();

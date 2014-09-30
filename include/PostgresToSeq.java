@@ -20,8 +20,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+//import java.io.BufferedReader;
+//import java.io.FileReader;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
