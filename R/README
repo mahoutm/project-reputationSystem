@@ -3,3 +3,5 @@
 # Set for
 # sessionInfo()
 # Sys.getlocale() and Sys.setlocale('LC_ALL','en_US.UTF-8')
+#
+# install.packages('cairoDevice',INSTALL_opts="--no-test-load")
