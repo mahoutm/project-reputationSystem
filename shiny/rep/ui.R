@@ -18,16 +18,16 @@ fluidRow(
 ,
 fluidRow(
 	column(8,
-	mainPanel(
 		plotOutput("PlotB")
-	))
+	),
+	column(4,
+		plotOutput("PlotC")
+	)
 )
 ,
 fluidRow(
-	mainPanel(
-		plotOutput("PlotA")
-        )
-)
-
+	column(12,
+	plotOutput("PlotA")
+))
 ))
 

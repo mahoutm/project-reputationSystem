@@ -3,6 +3,9 @@ library("RPostgreSQL")
 library(ggplot2)
 library(grid)
 library(gridExtra)
+library(KoNLP)
+library(RColorBrewer)
+library(wordcloud)
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
@@ -94,4 +97,21 @@ qplot(title='Summary',xlab='',ylab='reputation',ylim=c(-5,5)) +
   geom_line(aes(xx, yy$fit, linestyle='dashed',colour=factor(zz)) ,size=3,alpha=0.7)
 
   })
+
+  output$PlotC <- renderPlot({
+
+f <- file("./KingLear.txt", blocking=F)
+
+txtLines <- readLines(f)
+Encoding(txtLines) <- "UTF-8"
+
+nouns <- sapply(txtLines, extractNoun, USE.NAMES=F)
+close(f)
+wordcount <- table(unlist(nouns))
+pal <- brewer.pal(12,"Set3")
+pal <- pal[-c(1:2)]
+wordcloud(names(wordcount),freq=wordcount,scale=c(6,0.3),min.freq=40,
+          random.order=T,rot.per=.1,colors=pal)
+
+})
 })
