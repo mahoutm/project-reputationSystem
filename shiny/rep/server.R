@@ -38,13 +38,13 @@ dbDisconnect(con)
 
 
 p1 <-
-  qplot(x=tm,y=good,data=rep_sum,main='Good chart',xlab='datetime',ylab='count') +
+  qplot(x=tm,y=good,data=rep_sum,main='Good chart',xlab='',ylab='count') +
   geom_smooth() +
   #geom_point(shape = 21, colour='purple',size=2) +
   geom_line(linetype='dashed', colour='purple',size=0.2)  
 
 p2 <-
-  qplot(x=tm,y=bad,data=rep_sum,main='Bad chart',xlab='datetime',ylab='count') +
+  qplot(x=tm,y=bad,data=rep_sum,main='Bad chart',xlab='',ylab='count') +
   geom_smooth() +
   #geom_point(shape = 21, colour='red',size=2) +
   geom_line(linetype='dashed', colour='red',size=0.2)
@@ -56,8 +56,6 @@ grid.arrange(p1, p2, ncol = 2, main = "Water Korea")
   output$PlotB <- renderPlot({
 
 bins <- input$bins
-
-library("RPostgreSQL")
 
 drv <- dbDriver("PostgreSQL")
 con <- dbConnect(drv, dbname="uzeni",host="192.168.50.170",port=5432,user="postgres",password="pw")
@@ -76,14 +74,6 @@ rep_sum <- dbGetQuery(con,paste("
                                 ORDER BY substr(gettm,1,10) ASC ) A",sep=""))
 
 dbDisconnect(con)
-# for using sample data set.
-#library(csv)
-#write.csv(rep_sum,file="data/rep_sum.rdata")
-#read.csv(file="data/rep_sum.rdata")
-
-library(ggplot2)
-library(grid)
-library(gridExtra)
 
 x <- rep_sum$tm
 # fix reputation values belong -5 and 5.
@@ -97,10 +87,11 @@ m <- lm(y ~ poly(x,3))
 yy <- predict(m,newdata=data.frame(x=xx),interval = "confidence")
 yy <- data.frame(yy)
 
-qplot(title='Summary',xlab='time',ylab='reputation',ylim=c(-5,5)) +
+qplot(title='Summary',xlab='',ylab='reputation',ylim=c(-5,5)) +
+  geom_hline(yintercept=0,colour='black',alpha=0.5) +
   #geom_smooth(aes(x,y)) +
   geom_point(aes(x, y), shape=21, colour='black', fill='purple',size=2) + 
-  geom_line(aes(xx, yy$fit, linestyle='dashed',colour=factor(zz) ,size=3,alpha=0.7))
+  geom_line(aes(xx, yy$fit, linestyle='dashed',colour=factor(zz)) ,size=3,alpha=0.7)
 
   })
 })
