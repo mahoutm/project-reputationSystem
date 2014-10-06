@@ -1,0 +1,6 @@
+# How to run shiny's application?
+# call shiny's rep work-directory on R-Studio
+library(shiny)
+# setwd('/Users/Mark/Works')
+runApp(appDir='/Users/Mark/Works/rep',port=10001,host = getOption("shiny.host", "127.0.0.1"))
+
