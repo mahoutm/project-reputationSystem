@@ -107,7 +107,7 @@ dbDisconnect(con)
 pal <- brewer.pal(12,"Set3")
 pal <- pal[-c(1:2)]
 wordcloud(words=wc$word,freq=wc$count,scale=c(6,0.3),max.words=50,
-              random.order=T,rot.per=.1,colors=pal)
+              random.order=F,rot.per=.1,colors=pal)
 
 })
 })
