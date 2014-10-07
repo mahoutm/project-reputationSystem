@@ -17,10 +17,10 @@ fluidRow(
 )
 ,
 fluidRow(
-	column(8,
+	column(7,
 		plotOutput("PlotB")
 	),
-	column(4,
+	column(5,
 		plotOutput("PlotC")
 	)
 )
