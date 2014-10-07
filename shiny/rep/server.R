@@ -100,18 +100,14 @@ qplot(title='Summary',xlab='',ylab='reputation',ylim=c(-5,5)) +
 
   output$PlotC <- renderPlot({
 
-f <- file("./KingLear.txt", blocking=F)
-
-txtLines <- readLines(f)
-Encoding(txtLines) <- "UTF-8"
-
-nouns <- sapply(txtLines, extractNoun, USE.NAMES=F)
-close(f)
-wordcount <- table(unlist(nouns))
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, dbname="uzeni",host="192.168.50.170",port=5432,user="postgres",password="pw")
+wc <- dbGetQuery(con,"select word,count from mecab_nn_wc where length(word) > 1;")
+dbDisconnect(con)
 pal <- brewer.pal(12,"Set3")
 pal <- pal[-c(1:2)]
-wordcloud(names(wordcount),freq=wordcount,scale=c(6,0.3),min.freq=40,
-          random.order=T,rot.per=.1,colors=pal)
+wordcloud(words=wc$word,freq=wc$count,scale=c(6,0.3),max.words=50,
+              random.order=T,rot.per=.1,colors=pal)
 
 })
 })
