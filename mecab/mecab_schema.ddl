@@ -32,3 +32,10 @@ CREATE TABLE mecab_stack
   word character varying(100),
   description text
 );
+
+-- for wordcount
+CREATE TABLE mecab_nn_wc
+(
+  word character varying(100),
+  count bigint
+);
