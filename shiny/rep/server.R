@@ -47,32 +47,35 @@ shinyServer(function(input, output) {
     
     xx <- x ; div <- length(x)
     zz <- 1 ; zz[1:div] <- '평균'
-    for (i in 1:7) {xx[div + i] <- max(x) + ( 3600 * (i)) ; zz[div + i] <- '예측' }
+    for (i in 1:12) {xx[div + i] <- max(x) + ( 3600 * (i)) ; zz[div + i] <- '예측' }
     
     m <- lm(y ~ poly(x,3))
     yy <- predict(m,newdata=data.frame(x=xx),interval = "confidence")
     yy <- data.frame(yy)
     
     # description about standard values
-    desc.slope <- 0.15; desc.lev <- 1
-    desc.cond = yy$fit[div] - mean(yy$fit[div - 7:div])
+    desc.slope <- 0.15; desc.lev <- 1 ; desc.strong <- 0.7
 
-    if ( desc.cond < 0 ) out.cond <- '미만' else out.cond <- '이상'
     lev <- yy$fit[div]
-    if ( lev  > desc.lev  )            		out.color <- 'green'
-    if ( lev < desc.lev && div > - desc.lev )  	out.color <- 'blue'
-    if ( lev < - desc.lev )             	out.color <- 'red'
-    slope <- yy$fit[div + 7] - yy$fit[div]
-    if ( slope > desc.slope  )                   	out.text  <- '상승'
-    if ( slope < desc.slope && slope > - desc.slope )   out.text  <- '유지'
-    if ( slope < - desc.slope )                   	out.text  <- '하락'
+    if ( lev  > desc.lev  )
+      {out.color <- 'green'; out.lev <- '평균 이상'}
+    if ( lev < desc.lev && div > - desc.lev ) 
+      {out.color <- 'blue' ; out.lev <- '평균 근접'}
+    if ( lev < - desc.lev ) 
+      {out.color <- 'red'  ; out.lev <- '평균 이하'}
+    slope <- yy$fit[div + 6] - yy$fit[div]
+    if ( slope > abs(desc.strong) ) out.strong <- '강한' else out.strong <- '약한'
+    if ( slope > desc.slope  )                   	       out.slope  <- '상승'
+    if ( slope < desc.slope && slope > - desc.slope )    out.slope  <- '유지'
+    if ( slope < - desc.slope )                       	 out.slope  <- '하락'
     out.style <- paste("color:",out.color,sep="")
-    out.text2 <- paste("현재 평판 측정치는 최근 1주일간의 평균값 ",out.cond,"이며,향후 1주일간 ",out.text," 예상 됩니다!!",seq="")
+    out.text1 <- paste("현재 평판 측정치는",out.lev,"이며,",seq="")
+    out.text2 <- paste("향후 ",out.strong,out.slope," 예상 됩니다!!",seq="")
     
   fluidRow(
-  	column(5, wellPanel (h1(out.text, style = out.style , align = "center"))) 
+  	column(5, wellPanel (h2(out.slope, style = out.style , align = "center"))) 
   	,
-  	column(7, h4(out.text2,align = "center"))
+  	column(7, h4(out.text1,align = "center"), h4(out.text2,align = 'center'))
   )
 
     	}) 
@@ -144,7 +147,7 @@ shinyServer(function(input, output) {
 
     xx <- x ; div <- length(x)
     zz <- 1 ; zz[1:div] <- '평균'
-    for (i in 1:10) {xx[div + i] <- max(x) + ( 3600 * (i)) ; zz[div + i] <- '예측' }
+    for (i in 1:12) {xx[div + i] <- max(x) + ( 3600 * (i)) ; zz[div + i] <- '예측' }
 
     m <- lm(y ~ poly(x,3))
     yy <- predict(m,newdata=data.frame(x=xx),interval = "confidence")
@@ -183,7 +186,7 @@ shinyServer(function(input, output) {
                                     ,doctm as Upload_Time
                                     ,target as Reference
                                     ,num
-                                    ,substr(link,1,30) as URL
+                                    ,'<a href=\'' || link || '\'> link </a> ' as URL 
                                     ,substr(body,1,50) as Contents
                                     ,rep as Reputation
                                     FROM water_korea_test
@@ -195,3 +198,4 @@ shinyServer(function(input, output) {
   })
 
 })
+
