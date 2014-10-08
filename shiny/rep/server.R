@@ -186,7 +186,7 @@ shinyServer(function(input, output) {
                                     ,doctm as Upload_Time
                                     ,target as Reference
                                     ,num
-                                    ,'<a href=\'' || link || '\'> link </a> ' as URL 
+                                    ,'<a href=\\'' || link || '\\'> link </a> ' as URL 
                                     ,substr(body,1,50) as Contents
                                     ,rep as Reputation
                                     FROM water_korea_test
