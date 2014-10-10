@@ -16,10 +16,12 @@ except:
 # Open query and insert cursor
 cur = conn.cursor()
 cur2 = conn.cursor()
-cur.execute("select * from water_korea_test where gettm > to_char(now() - '1 days'::interval,'YYYYMMDDHH24MI') limit 1000;")
-cur2.execute("truncate mecab_nn_wc;")
+cur.execute("select * from water_korea_test where rep is not null and gettm > to_char(now() - '1 hours'::interval,'YYYYMMDDHH24MI');")
+#cur2.execute("delete from mecab_nn_wd where tm < to_char(now() - '7 days'::interval,'YYYYMMDDHH24MI');")
 
-wordcount={}
+wc_good={}
+wc_bad={}
+wc_none={}
 for rec in cur:
 	seq, gettm, doctm, target, num, link, body, rep = rec
 	dic = m.parse(body)
@@ -30,13 +32,28 @@ for rec in cur:
 		if len(stack) < 2 : continue
 		word = stack[0]; opt = stack[1] ; num += 1
 		if bool(re.match('NN.+',opt)):
-              		if word not in wordcount:
-				wordcount[word] = 1
-			else:
-				wordcount[word] += 1
+			if rep == 'Good':
+		       		if word not in wc_good :
+					wc_good[word] = 1
+				else:
+					wc_good[word] += 1
+			if rep == 'Bad':
+		       		if word not in wc_bad :
+					wc_bad[word] = 1
+				else:
+					wc_bad[word] += 1
+			if rep == 'None':
+		       		if word not in wc_none :
+					wc_none[word] = 1
+				else:
+					wc_none[word] += 1
 
-for word in wordcount:
-	cur2.execute("insert into mecab_nn_wc (word,count) values ('"+word+"',"+str(wordcount[word])+");")
+for word in wc_good:
+	cur2.execute("insert into mecab_nn_wc (tm,rep,word,count) values (now(),'Good','"+word+"',"+str(wc_good[word])+");")
+for word in wc_bad:
+	cur2.execute("insert into mecab_nn_wc (tm,rep,word,count) values (now(),'Bad','"+word+"',"+str(wc_bad[word])+");")
+for word in wc_none:
+	cur2.execute("insert into mecab_nn_wc (tm,rep,word,count) values (now(),'None','"+word+"',"+str(wc_none[word])+");")
 
 conn.commit()
 conn.close()
