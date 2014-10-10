@@ -1,3 +1,6 @@
+#referred page.
+#http://falcon.incubator.apache.org/0.5-incubating/FalconCLI.html
+
 # start
 falcon entity -type cluster -submit -file sandbox.xml
 falcon entity -type feed -submit -file repdbFeed.xml 
