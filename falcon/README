@@ -1,0 +1,11 @@
+# start
+falcon entity -type cluster -submit -file sandbox.xml
+falcon entity -type feed -submit -file repdbFeed.xml 
+falcon entity -type process -submit -file repdbdumpProcess.xml
+
+falcon entity -type feed -schedule -name repdbFeed
+falcon entity -type process -schedule -name repdbdumpProcess
+
+# stop
+falcon entity -type process -delete -name repdbdumpProcess
+falcon entity -type feed -delete -name repdbFeed

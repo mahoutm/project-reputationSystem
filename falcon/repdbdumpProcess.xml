@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process name="repdbdumpProcess" xmlns="uri:falcon:process:0.1">
+    
+    <tags>pipeline=churnAnalysisDataPipeline,owner=ETLGroup,externalSystem=sandboxServers</tags>
+    
+    <clusters>
+        <cluster name="primaryCluster">
+            <validity start="2014-10-08T00:00Z" end="2016-10-08T00:00Z"/>
+        </cluster>
+    </clusters>
+    
+    <parallel>1</parallel>
+    <order>FIFO</order>
+    <frequency>hours(1)</frequency>
+    
+    <outputs>
+        <output name="output" feed="repdbFeed" instance="now(0,0)" />
+    </outputs>
+    
+    <workflow name="dumpWorkflow" version="2.0.0"
+    engine="oozie" path="/user/hue/oozie/dbdump" />
+    
+    <retry policy="periodic" delay="minutes(15)" attempts="3" />
+    
+</process>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<feed description="table backup feed" name="repdbFeed"
+    xmlns="uri:falcon:feed:0.1">
+    
+    <tags>externalSystem=ReputationServer,classification=secure</tags>
+    <groups>churnAnalysisDataPipeline</groups>
+    <frequency>hours(1)</frequency>
+    <late-arrival cut-off="hours(4)"/>
+    <clusters>
+        <cluster name="primaryCluster" type="source">
+            <validity start="2014-10-08T00:00Z" end="2016-10-08T00:00Z"/>
+            <retention limit="days(90)" action="delete"/>
+        </cluster>
+    </clusters>
+    
+    <locations>
+        <location type="data"
+        path="/user/hue/oozie/dbdump/primary/input/${YEAR}-${MONTH}-${DAY}-${HOUR}"/>
+        <location type="stats" path="/none"/>
+        <location type="meta" path="/none"/>
+    </locations>
+    
+    <ACL owner="hue" group="users" permission="0755"/>
+    <schema location="/none" provider="none"/>
+</feed>
