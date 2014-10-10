@@ -36,6 +36,8 @@ CREATE TABLE mecab_stack
 -- for wordcount
 CREATE TABLE mecab_nn_wc
 (
+  tm timestamp without time zone,
+  rep character varying(10),
   word character varying(100),
   count bigint
 );
