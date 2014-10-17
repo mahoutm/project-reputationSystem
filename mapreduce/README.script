@@ -1,0 +1,7 @@
+hadoop jar /usr/lib/hadoop-mapreduce/hadoop-streaming.jar \
+        -D mapreduce.job.reduces=1 \
+	-files mapper.py,reducer.py \
+	-mapper mapper.py \
+        -reducer reducer.py \
+        -input dat/*.txt \
+	-output out/$1
