@@ -33,6 +33,7 @@ java TopCategoryWords train/model train/labelindex train/vec/dictionary.file-0 t
 # classifying
 java Classifier train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 data/tweets-test-set.tsv 
 java PostgresClassifier train/model train/labelindex train/vec/dictionary.file-0 train/vec/df-count/part-r-00000 $test
+java ClassifierHD /user/root/train/model /user/root/train/labelindex /user/root/train/vec/dictionary.file-0 /user/root/train/vec/df-count/part-r-00000 waterkorea.documents_history flume/events
 
 
 ##### ETC ######
@@ -40,3 +41,4 @@ java PostgresClassifier train/model train/labelindex train/vec/dictionary.file-0
 mahout split  -i train/vec/tfidf-vectors --trainingOutput train/vec_train --testOutput train/vec_test --randomSelectionPct 40 --overwrite --sequenceFiles -xm sequential
 mahout testnb -i train/vec_train -m train/model -l train/labelindex -ow -o test/out -c
 mahout testnb -i train/vec_test  -m train/model -l train/labelindex -ow -o test/out -c
+

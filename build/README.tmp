@@ -1,0 +1,1 @@
+java ClassifierHD /user/root/train/model /user/root/train/labelindex /user/root/train/vec/dictionary.file-0 /user/root/train/vec/df-count/part-r-00000 test flume/events
