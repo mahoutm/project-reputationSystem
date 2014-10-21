@@ -24,8 +24,10 @@ import java.math.BigDecimal;
 
 //import java.io.FileReader;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.StringReader;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -118,8 +120,11 @@ public class ClassifierHD {
                 
                 FileSystem fs = FileSystem.get(configuration);
                 FileStatus[] status = fs.listStatus(new Path(inputDir));
+                BufferedWriter bw=new BufferedWriter(new OutputStreamWriter(fs.create(new Path(inputDir + "/rep.list"),true)));
+
                 for (int i=0;i<status.length;i++){
                         BufferedReader br=new BufferedReader(new InputStreamReader(fs.open(status[i].getPath())));
+			if ( new String(status[i].getPath().getName() ).equals( "rep.list" ) ) { continue; }
 			int lv_HEAD = 1;
 			int lv_cnt = 0;
 			String lv_gtime = null;
@@ -200,12 +205,14 @@ public class ClassifierHD {
                 	pstmt.setString(7,message.substring(1,Math.min(50, message.length())));
                 	pstmt.setString(8,labels.get(bestCategoryId));
 		    	pstmt.addBatch();
+			bw.write(id + "\t" + labels.get(bestCategoryId) + "\n" );
 		}
                 pstmt.executeBatch();
     		//pstmt.clearParameters();
                 pstmt.close();
 		conn.commit();
                 conn.close();
+		bw.close();
                 } catch ( Exception e ) {
                         System.err.println( e.getClass().getName()+": "+ e.getMessage() );
                         System.exit(0);
